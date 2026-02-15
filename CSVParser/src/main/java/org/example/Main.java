@@ -5,10 +5,9 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        if (args.length < 2) {
+        if (args.length != 2) {
             System.out.println("Usage: java Main <input_file> <output_file>");
             return;
-        }
 
         WordCounter counter = new WordCounter();
 
