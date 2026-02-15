@@ -4,10 +4,7 @@ public class WordCleaner {
             return "";
         }
 
-        String cleaned = word.replaceAll("[^\\p{L}\\p{M}'-]+", " ");
-        cleaned = cleaned.replaceAll("^[-']+", "").replaceAll("[-']+$", "");
-        cleaned = cleaned.replaceAll("\\s+", " ");
-        cleaned = cleaned.trim();
+        String cleaned = word.replaceAll("^[^\p{L}\p{M}'-]+|[^\p{L}\p{M}'-]+$", "");
         return cleaned.toLowerCase();
     }
 
