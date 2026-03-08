@@ -1,0 +1,4 @@
+Привет мир! Hello world.
+Как дела? How are you?
+Мир прекрасен! World is beautiful.
+Привет еще раз.
