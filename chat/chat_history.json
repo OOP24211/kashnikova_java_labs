@@ -1,0 +1,76 @@
+{
+  "room1": [
+    {
+      "type": "message",
+      "user": "Эва",
+      "room": "room1",
+      "text": "привет"
+    },
+    {
+      "type": "message",
+      "user": "User",
+      "room": "room1",
+      "text": "привет"
+    },
+    {
+      "type": "system",
+      "user": "System",
+      "room": "room1",
+      "text": "Эва вошел в чат"
+    },
+    {
+      "type": "system",
+      "user": "System",
+      "room": "room1",
+      "text": "User вошел в чат"
+    },
+    {
+      "type": "system",
+      "user": "System",
+      "room": "room1",
+      "text": "User вошел в чат"
+    },
+    {
+      "type": "system",
+      "user": "System",
+      "room": "room1",
+      "text": "Эва вошел в чат"
+    },
+    {
+      "type": "system",
+      "room": "room1",
+      "text": "Эва вошел в чат"
+    }
+  ],
+  "room2": [
+    {
+      "type": "system",
+      "user": "System",
+      "room": "room2",
+      "text": "User вошел в чат"
+    },
+    {
+      "type": "system",
+      "user": "System",
+      "room": "room2",
+      "text": "Эва вошел в чат"
+    },
+    {
+      "type": "message",
+      "user": "Эва",
+      "room": "room2",
+      "text": "привет"
+    },
+    {
+      "type": "message",
+      "user": "User",
+      "room": "room2",
+      "text": "привет"
+    },
+    {
+      "type": "system",
+      "room": "room2",
+      "text": "Эва вошел в чат"
+    }
+  ]
+}
