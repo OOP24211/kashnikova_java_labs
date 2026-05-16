@@ -7,6 +7,7 @@ public class MessageDTO {
     public String user;
     public String room;
     public String text;
+    public String fileName;
     public String data;
     public List<String> users;
     public List<String> rooms;

@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Client;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -34,7 +34,7 @@ public class ChatClient extends Application {
     private String currentRoom;
     private boolean hasJoinedRoom = false;
     private boolean isUpdatingRooms = false;
-    private Gson gson = new Gson();
+    private final Gson gson = new Gson();
 
     private final String BG_COLOR = "#E6EBEF";
     private final String SIDEBAR_COLOR = "#FFFFFF";
@@ -164,6 +164,7 @@ public class ChatClient extends Application {
             public void onOpen(ServerHandshake handshake) { requestRooms(); }
 
             @Override
+            @SuppressWarnings("unchecked")
             public void onMessage(String message) {
                 JsonObject json = gson.fromJson(message, JsonObject.class);
                 String type = json.get("type").getAsString();
@@ -192,7 +193,6 @@ public class ChatClient extends Application {
                             List<String> users = gson.fromJson(json.get("users"), List.class);
                             userListView.setItems(FXCollections.observableArrayList(users));
                             break;
-
                         case "history":
                             messageArea.getChildren().clear();
                             JsonArray history = json.getAsJsonArray("messages");
