@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FREEDOM PATH — Awards</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+                    colors: {
+                        darkBg: '#121a1d',
+                        cardBg: 'rgba(26, 35, 38, 0.7)',
+                        accentMint: '#00f2fe',
+                        accentNeon: '#4facfe',
+                        textMuted: '#94a3b8'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background: radial-gradient(circle at top left, #1a2e35, #121a1d); }
+        .glow-bronze { filter: drop-shadow(0 0 12px rgba(217, 119, 6, 0.35)); }
+        .glow-mint { filter: drop-shadow(0 0 12px rgba(0, 242, 254, 0.4)); }
+        .glow-emerald { filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.4)); }
+        .glass-card { backdrop-filter: blur(12px); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #121a1d; }
+        ::-webkit-scrollbar-thumb { background: #1a2326; border-radius: 3px; }
+    </style>
+</head>
+<body class="text-slate-100 min-h-screen antialiased font-sans">
+
+<header class="border-b border-slate-800/60 bg-darkBg/80 backdrop-blur-md sticky top-0 z-50 px-6 py-4">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="p-2 bg-gradient-to-tr from-accentNeon to-accentMint rounded-xl text-darkBg">
+                <i data-lucide="shield-check" class="w-6 h-6 stroke-[2.5]"></i>
+            </div>
+            <span class="font-black tracking-widest text-xl bg-gradient-to-r from-white via-slate-200 to-textMuted bg-clip-text text-transparent">FREEDOM PATH</span>
+        </div>
+
+        <nav class="hidden md:flex items-center gap-8">
+            <a href="/" class="text-sm font-semibold text-textMuted hover:text-white pb-1 tracking-wide transition-all">Dashboard</a>
+            <a href="/achievements" class="text-sm font-semibold text-accentMint border-b-2 border-accentMint pb-1 tracking-wide transition-all">Awards</a>
+        </nav>
+
+        <div class="relative group h-12 flex items-center gap-3 cursor-pointer">
+            <div class="text-right hidden sm:block">
+                <div class="text-sm font-bold text-slate-200" th:text="${username}">Алексей</div>
+            </div>
+            <div class="w-10 h-10 rounded-full border-2 border-slate-700 overflow-hidden ring-2 ring-accentMint/20">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" alt="Avatar" class="w-full h-full object-cover">
+            </div>
+            <i data-lucide="chevron-down" class="w-4 h-4 text-textMuted group-hover:text-white transition-all"></i>
+
+            <div class="absolute right-0 top-12 pt-2 hidden group-hover:block w-48 z-50">
+                <div class="bg-[#1a2326] border border-slate-800 rounded-xl p-2 shadow-2xl backdrop-blur-xl">
+                    <form th:action="@{/logout}" method="post" class="m-0">
+                        <button type="submit" class="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg flex items-center gap-2 transition-all">
+                            <i data-lucide="log-out" class="w-4 h-4"></i> Выйти из системы
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-6 py-10 space-y-10">
+    <section class="bg-cardBg glass-card border border-slate-800/80 rounded-3xl p-6 md:p-8 shadow-xl">
+        <h1 class="text-3xl font-extrabold text-white">Моя галерея побед</h1>
+        <p class="text-textMuted font-medium mt-2">Каждая награда — это шаг к свободе.</p>
+    </section>
+
+    <section class="flex flex-wrap gap-2 border-b border-slate-800/60 pb-4">
+        <button onclick="filterAwards('all')" id="tab-all" class="px-5 py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase bg-gradient-to-r from-accentNeon to-accentMint text-darkBg shadow-md transition-all">Все награды</button>
+        <button onclick="filterAwards('unlocked')" id="tab-unlocked" class="px-5 py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase bg-slate-800/50 text-slate-400 hover:text-white border border-slate-700/40 transition-all">Полученные</button>
+        <button onclick="filterAwards('locked')" id="tab-locked" class="px-5 py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase bg-slate-800/50 text-slate-400 hover:text-white border border-slate-700/40 transition-all">В процессе</button>
+    </section>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div th:each="ach : ${achievements}"
+             class="award-card border rounded-2xl p-5 text-center flex flex-col items-center justify-between group transition-all duration-300 hover:-translate-y-1"
+             th:data-status="${ach.unlocked ? 'unlocked' : 'locked'}"
+             th:classappend="${ach.unlocked ? 'bg-cardBg glass-card border-slate-800/80 hover:border-slate-700/60' : 'bg-slate-900/40 border-slate-800/60'}">
+
+            <div th:if="${ach.unlocked}" class="flex flex-col items-center">
+                <div class="w-20 h-20 rounded-full flex items-center justify-center border-4 mb-4 transform group-hover:scale-105 transition-transform"
+                     th:classappend="${ach.requiredDays == 1 ? 'bg-gradient-to-br from-amber-700 to-amber-900 border-amber-600/40 text-amber-200 glow-bronze' :
+                                      ach.requiredDays == 7 ? 'bg-gradient-to-br from-[#4facfe] to-[#00f2fe] border-cyan-400/30 text-darkBg glow-mint' :
+                                      'bg-gradient-to-br from-emerald-500 to-teal-700 border-emerald-400/30 text-emerald-100 glow-emerald'}">
+                    <i data-lucide="award" th:if="${ach.requiredDays == 1}" class="w-10 h-10 stroke-[1.5]"></i>
+                    <i data-lucide="zap" th:if="${ach.requiredDays == 7}" class="w-10 h-10 stroke-[1.5]"></i>
+                    <i data-lucide="shield" th:if="${ach.requiredDays > 7}" class="w-10 h-10 stroke-[1.5]"></i>
+                </div>
+                <h4 class="font-bold text-white text-base" th:text="${ach.title}">Название</h4>
+                <p class="text-xs text-textMuted mt-1" th:text="${ach.description}">Описание</p>
+                <span class="mt-4 px-3 py-1 bg-slate-900/40 text-slate-300 text-[10px] font-bold tracking-widest uppercase rounded-full border border-slate-800">Разблокировано</span>
+            </div>
+
+            <div th:if="${!ach.unlocked}" class="flex flex-col items-center w-full justify-between h-full">
+                <div class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center text-slate-600 border-4 border-slate-800/40 mb-4 group-hover:border-slate-700/40 transition-all">
+                    <i data-lucide="lock" class="w-8 h-8 opacity-60"></i>
+                </div>
+                <div class="space-y-1">
+                    <h4 class="font-bold text-slate-400 text-base" th:text="${ach.title}">Название</h4>
+                    <p class="text-xs text-slate-500 group-hover:hidden transition-all" th:text="'Требуется: ' + ${ach.requiredDays} + ' д.'">Дней</p>
+                </div>
+                <span class="mt-4 px-3 py-1 bg-slate-800 text-slate-500 text-[10px] font-bold tracking-widest uppercase rounded-full border border-slate-700/60">В процессе</span>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    lucide.createIcons();
+
+    function filterAwards(status) {
+        const buttons = document.querySelectorAll('button[onclick^="filterAwards"]');
+        buttons.forEach(btn => {
+            btn.className = "px-5 py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase bg-slate-800/50 text-slate-400 hover:text-white border border-slate-700/40 transition-all";
+        });
+
+        const activeBtn = document.querySelector(`button[onclick="filterAwards('${status}')"]`);
+        if (activeBtn) {
+            activeBtn.className = "px-5 py-2.5 rounded-xl text-xs font-bold tracking-wider uppercase bg-gradient-to-r from-accentNeon to-accentMint text-darkBg shadow-md shadow-accentMint/20 transition-all";
+        }
+
+        const cards = document.querySelectorAll('.award-card');
+        cards.forEach(card => {
+            const cardStatus = card.getAttribute('data-status');
+            card.style.display = (status === 'all' || cardStatus === status) ? 'flex' : 'none';
+        });
+    }
+</script>
+
+</body>
+</html>
